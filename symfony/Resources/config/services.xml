@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="import_product_msi.repository.sql.statement" class="TechDivision\Import\Product\Msi\Repositories\SqlStatementRepository"/>
+        <service id="import_product_msi.repository.inventory.source.item" class="TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_msi.repository.sql.statement"/>
+        </service>
+
+        <service id="import_product_msi.action.processor.inventory.source.item.create" class="TechDivision\Import\Product\Msi\Actions\Processors\InventorySourceItemCreateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_msi.repository.sql.statement"/>
+        </service>
+        <service id="import_product_msi.action.processor.inventory.source.item.delete" class="TechDivision\Import\Product\Msi\Actions\Processors\InventorySourceItemDeleteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_msi.repository.sql.statement"/>
+        </service>
+        <service id="import_product_msi.action.processor.inventory.source.item.update" class="TechDivision\Import\Product\Msi\Actions\Processors\InventorySourceItemUpdateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_msi.repository.sql.statement"/>
+        </service>
+
+        <service id="import_product_msi.action.inventory.source.item" class="TechDivision\Import\Product\Msi\Actions\InventorySourceItemAction">
+            <argument type="service" id="import_product_msi.action.processor.inventory.source.item.create"/>
+            <argument type="service" id="import_product_msi.action.processor.inventory.source.item.update"/>
+            <argument type="service" id="import_product_msi.action.processor.inventory.source.item.delete"/>
+        </service>
+
+        <service id="import_product_msi.processor.msi.bunch" class="TechDivision\Import\Product\Msi\Services\MsiBunchProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_msi.repository.inventory.source.item"/>
+            <argument type="service" id="import_product_msi.action.inventory.source.item"/>
+        </service>
+
+        <service id="import_product_msi.observer.clean.up" class="TechDivision\Import\Product\Msi\Observers\CleanUpObserver">
+            <argument type="service" id="import_product_msi.processor.msi.bunch"/>
+        </service>
+        <service id="import_product_msi.observer.inventory.source.item" class="TechDivision\Import\Product\Msi\Observers\InventorySourceItemObserver">
+            <argument type="service" id="import_product_msi.processor.msi.bunch"/>
+        </service>
+        <service id="import_product_msi.observer.inventory.source.item.update" class="TechDivision\Import\Product\Msi\Observers\InventorySourceItemUpdateObserver">
+            <argument type="service" id="import_product_msi.processor.msi.bunch"/>
+        </service>
+
+        <service id="import_product_msi.subject.bunch" class="TechDivision\Import\Product\Msi\Subjects\BunchSubject" shared="false">
+            <argument type="service" id="import.processor.registry"/>
+            <argument type="service" id="import.generator.core.config.data.uid"/>
+            <argument type="service" id="loggers"/>
+            <argument type="service" id="import.events.emitter"/>
+        </service>
+
+    </services>
+
+</container>
