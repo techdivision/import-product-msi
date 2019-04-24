@@ -108,7 +108,6 @@
               "observers": [
                 {
                   "import": [
-                    "import_product_msi.observer.clear.inventory.source.item",
                     "import_product_msi.observer.inventory.source.item"
                   ]
                 }
