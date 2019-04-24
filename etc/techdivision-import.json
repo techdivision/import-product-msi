@@ -5,6 +5,19 @@
   "archive-artefacts" : true,
   "debug-mode" : false,
   "entity-type-code" : "catalog_product_inventory_msi",
+  "listeners" : [
+    {
+      "app.set.up" : [
+        "import.listener.render.ansi.art",
+        "import.listener.initialize.registry"
+      ]
+    },
+    {
+      "app.tear.down" : [
+        "import.listener.clear.registry"
+      ]
+    }
+  ],
   "databases" : [
   ],
   "loggers": [
@@ -32,6 +45,83 @@
   ],
   "operations" : [
     {
+      "name" : "delete",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects": [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "file-resolver": {
+                "prefix": "product-import-inventory-msi"
+              },
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "product-import-inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product_msi.observer.clear.inventory.source.item"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    },
+    {
+      "name" : "replace",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects": [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "file-resolver": {
+                "prefix": "product-import-inventory-msi"
+              },
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_product_msi.subject.bunch",
+              "identifier": "files",
+              "file-resolver": {
+                "prefix": "product-import-inventory-msi"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_product_msi.observer.clear.inventory.source.item",
+                    "import_product_msi.observer.inventory.source.item"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    },
+    {
       "name" : "add-update",
       "plugins" : [
         {
@@ -58,11 +148,6 @@
                 {
                   "import": [
                     "import_product_msi.observer.inventory.source.item.update"
-                  ]
-                },
-                {
-                  "post-import": [
-                    "import_product_msi.observer.clean.up"
                   ]
                 }
               ]

@@ -33,6 +33,13 @@ class ColumnKeys extends \TechDivision\Import\Product\Utils\ColumnKeys
 {
 
     /**
+     * Name for the column 'inventory_source_items'.
+     *
+     * @var string
+     */
+    const INVENTORY_SOURCE_ITEMS = 'inventory_source_items';
+
+    /**
      * Name for the column 'quantity'.
      *
      * @var string

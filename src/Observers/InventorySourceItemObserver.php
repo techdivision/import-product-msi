@@ -71,14 +71,31 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
     protected function process()
     {
 
+        // load SKU and inventory source code
+        $sku = $this->getValue(ColumnKeys::SKU);
+        $sourceCode = $this->getValue(ColumnKeys::SOURCE_CODE);
+
         // query whether or not, we've found a new SKU/source code combination => means we've found a inventory source item
-        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU), $this->getValue(ColumnKeys::SOURCE_CODE))) {
+        if ($this->hasBeenProcessed($sku, $sourceCode)) {
             return;
         }
 
-        // create the MSI inventory source item
-        $inventorySourceItem = $this->initializeInventorySourceItem($this->prepareAttributes());
-        $this->persistInventorySourceItem($inventorySourceItem);
+        // query whether or not the inventory source is with the given code is avaiable
+        if ($this->hasInventorySource($sourceCode)) {
+            // create the MSI inventory source item
+            $inventorySourceItem = $this->initializeInventorySourceItem($this->prepareAttributes());
+            $this->persistInventorySourceItem($inventorySourceItem);
+
+            // finaly, add the SKU + source code => source item ID mapping
+            $this->addSkuSourceItemIdMapping($sku, $sourceCode);
+        } else {
+            // throw a new exception
+            throw new \Exception(
+                $this->appendExceptionSuffix(
+                    sprintf('Can\'t load inventory source with code "%s"', $sourceCode)
+                )
+            );
+        }
     }
 
     /**
@@ -117,6 +134,31 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
     protected function initializeInventorySourceItem(array $attr)
     {
         return $attr;
+    }
+
+    /**
+     * Queries whether or not the inventory source with the passed code is available.
+     *
+     * @param string $sourceCode The code of the inventory source to query for
+     *
+     * @return boolean TRUE if the inventory source with the passed code is available, FALSE if not
+     */
+    protected function hasInventorySource($sourceCode)
+    {
+        return $this->getSubject()->hasInventorySource($sourceCode);
+    }
+
+    /**
+     * Add the passed SKU/source code => source item ID mapping.
+     *
+     * @param string $sku        The SKU
+     * @param string $sourceCode The source code
+     *
+     * @return void
+     */
+    protected function addSkuSourceItemIdMapping($sku, $sourceCode)
+    {
+        $this->getSubject()->addSkuSourceItemIdMapping($sku, $sourceCode);
     }
 
     /**

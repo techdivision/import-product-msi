@@ -46,7 +46,8 @@ class InventorySourceItemDeleteProcessor extends AbstractDeleteProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM => $this->loadStatement(SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM)
+            SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM                        => $this->loadStatement(SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM),
+            SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE => $this->loadStatement(SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE)
         );
     }
 }

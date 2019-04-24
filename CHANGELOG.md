@@ -1,3 +1,13 @@
+# Version 4.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Integrate MSI functionality in M2IF core
+
 # Version 3.0.0
 
 ## Bugfixes

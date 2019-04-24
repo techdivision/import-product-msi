@@ -30,6 +30,7 @@ use TechDivision\Import\Actions\ActionInterface;
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
+ * @deprecated Since version 4.0.0
  */
 interface InventorySourceItemActionInterface extends ActionInterface
 {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Msi\Observers\CleanUpObserver
+ * TechDivision\Import\Product\Msi\Observers\ClearInventorySourceItemObserver
  *
  * NOTICE OF LICENSE
  *
@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2018 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
@@ -22,17 +22,19 @@ namespace TechDivision\Import\Product\Msi\Observers;
 
 use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
 use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
+use TechDivision\Import\Product\Msi\Utils\MemberNames;
+use TechDivision\Import\Product\Msi\Utils\SqlStatementKeys;
 
 /**
- * Observer implementation that handles the process to import inventory source item bunches.
+ * Observer that removes the MSI product sourch item with the SKU/Source Code found in the CSV file.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2018 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
  */
-class CleanUpObserver extends AbstractMsiImportObserver
+class ClearInventorySourceItemObserver extends AbstractMsiImportObserver
 {
 
     /**
@@ -69,24 +71,25 @@ class CleanUpObserver extends AbstractMsiImportObserver
      */
     protected function process()
     {
-
-        // add the SKU/source code => source item ID mapping
-        $this->addSkuSourceItemIdMapping($this->getValue(ColumnKeys::SKU), $this->getValue(ColumnKeys::SOURCE_CODE));
-
-        // clean-up the repositories etc. to free memory
-        $this->getMsiBunchProcessor()->cleanUp();
+        $this->deleteInventorySourceItem(
+            array(
+                MemberNames::SKU         => $this->getValue(ColumnKeys::SKU),
+                MemberNames::SOURCE_CODE => $this->getValue(ColumnKeys::SOURCE_CODE)
+            ),
+            SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE
+        );
     }
 
     /**
-     * Add the passed SKU/source code => source item ID mapping.
+     * Delete's the entity with the passed attributes.
      *
-     * @param string $sku        The SKU
-     * @param string $sourceCode The source code
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return void
      */
-    protected function addSkuSourceItemIdMapping($sku, $sourceCode)
+    protected function deleteInventorySourceItem($row, $name = null)
     {
-        $this->getSubject()->addSkuSourceItemIdMapping($sku, $sourceCode);
+        $this->getMsiBunchProcessor()->deleteInventorySourceItem($row, $name);
     }
 }

@@ -6,6 +6,10 @@
     <services>
 
         <service id="import_product_msi.repository.sql.statement" class="TechDivision\Import\Product\Msi\Repositories\SqlStatementRepository"/>
+        <service id="import_product_msi.repository.inventory.source" class="TechDivision\Import\Product\Msi\Repositories\InventorySourceRepository">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_msi.repository.sql.statement"/>
+        </service>
         <service id="import_product_msi.repository.inventory.source.item" class="TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_msi.repository.sql.statement"/>
@@ -24,7 +28,7 @@
             <argument type="service" id="import_product_msi.repository.sql.statement"/>
         </service>
 
-        <service id="import_product_msi.action.inventory.source.item" class="TechDivision\Import\Product\Msi\Actions\InventorySourceItemAction">
+        <service id="import_product_msi.action.inventory.source.item" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product_msi.action.processor.inventory.source.item.create"/>
             <argument type="service" id="import_product_msi.action.processor.inventory.source.item.update"/>
             <argument type="service" id="import_product_msi.action.processor.inventory.source.item.delete"/>
@@ -32,17 +36,19 @@
 
         <service id="import_product_msi.processor.msi.bunch" class="TechDivision\Import\Product\Msi\Services\MsiBunchProcessor">
             <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_msi.repository.inventory.source"/>
             <argument type="service" id="import_product_msi.repository.inventory.source.item"/>
             <argument type="service" id="import_product_msi.action.inventory.source.item"/>
         </service>
 
-        <service id="import_product_msi.observer.clean.up" class="TechDivision\Import\Product\Msi\Observers\CleanUpObserver">
-            <argument type="service" id="import_product_msi.processor.msi.bunch"/>
-        </service>
+        <service id="import_product_msi.observer.product.source.item" class="TechDivision\Import\Product\Msi\Observers\ProductSourceItemObserver"/>
         <service id="import_product_msi.observer.inventory.source.item" class="TechDivision\Import\Product\Msi\Observers\InventorySourceItemObserver">
             <argument type="service" id="import_product_msi.processor.msi.bunch"/>
         </service>
         <service id="import_product_msi.observer.inventory.source.item.update" class="TechDivision\Import\Product\Msi\Observers\InventorySourceItemUpdateObserver">
+            <argument type="service" id="import_product_msi.processor.msi.bunch"/>
+        </service>
+        <service id="import_product_msi.observer.clear.inventory.source.item" class="TechDivision\Import\Product\Msi\Observers\ClearInventorySourceItemObserver">
             <argument type="service" id="import_product_msi.processor.msi.bunch"/>
         </service>
 
@@ -51,6 +57,7 @@
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
             <argument type="service" id="import.events.emitter"/>
+            <argument type="service" id="import_product_msi.processor.msi.bunch"/>
         </service>
 
     </services>

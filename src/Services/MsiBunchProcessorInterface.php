@@ -33,6 +33,13 @@ interface MsiBunchProcessorInterface
 {
 
     /**
+     * Return's the repository to load the inventory sources with.
+     *
+     * @return \TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface The repository instance
+     */
+    public function getInventorySourceRepository();
+
+    /**
      * Return's the repository to load the inventory source items with.
      *
      * @return \TechDivision\Import\Product\Repositories\StockItemRepositoryInterface The repository instance
@@ -42,7 +49,7 @@ interface MsiBunchProcessorInterface
     /**
      * Return's the action with the inventory source item CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Msi\Actions\InventorySourceItemActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getInventorySourceItemAction();
 
@@ -55,6 +62,13 @@ interface MsiBunchProcessorInterface
      * @return array The inventory source item
      */
     public function loadInventorySourceItemBySkuAndSourceCode($sku, $sourceCode);
+
+    /**
+     * Load's the available inventory sources.
+     *
+     * @return array The available inventory sources
+     */
+    public function loadInventorySources();
 
     /**
      * Persist's the passed inventory source item data.

@@ -44,9 +44,12 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
             'SELECT *
                FROM inventory_source_item
               WHERE source_item_id = :source_item_id',
+        SqlStatementKeys::INVENTORY_SOURCES =>
+            'SELECT *
+               FROM inventory_source',
         SqlStatementKeys::INVENTORY_SOURCE_ITEMS =>
             'SELECT *
-               FROM inventory_source_items',
+               FROM inventory_source_item',
         SqlStatementKeys::INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE =>
             'SELECT *
                FROM inventory_source_item
@@ -73,7 +76,12 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
         SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM =>
             'DELETE
                FROM inventory_source_item
-              WHERE source_item_id = :source_item_id'
+              WHERE source_item_id = :source_item_id',
+        SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE =>
+            'DELETE
+               FROM inventory_source_item
+              WHERE sku = :sku
+                AND source_code = :source_code'
     );
 
     /**

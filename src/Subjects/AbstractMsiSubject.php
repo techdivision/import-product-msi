@@ -22,6 +22,11 @@ namespace TechDivision\Import\Product\Msi\Subjects;
 
 use TechDivision\Import\Subjects\AbstractSubject;
 use TechDivision\Import\Product\Msi\Utils\RegistryKeys;
+use TechDivision\Import\Services\RegistryProcessorInterface;
+use Doctrine\Common\Collections\Collection;
+use League\Event\EmitterInterface;
+use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 
 /**
  * The abstract subject implementation that provides basic MSI inventory source item
@@ -49,6 +54,53 @@ abstract class AbstractMsiSubject extends AbstractSubject
      * @var array
      */
     protected $skuSourceItemIdMapping = array();
+
+    /**
+     * The available inventory sources.
+     *
+     * @var array
+     */
+    protected $inventorySources = array();
+
+    /**
+     * The MSI bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface
+     */
+    protected $msiBunchProcessor;
+
+    /**
+     * Initialize the subject instance.
+     *
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface $registryProcessor          The registry processor instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param \Doctrine\Common\Collections\Collection                  $systemLoggers              The array with the system loggers instances
+     * @param \League\Event\EmitterInterface                           $emitter                    The event emitter instance
+     */
+    public function __construct(
+        RegistryProcessorInterface $registryProcessor,
+        GeneratorInterface $coreConfigDataUidGenerator,
+        Collection $systemLoggers,
+        EmitterInterface $emitter,
+        MsiBunchProcessorInterface $msiBunchProcessor
+    ) {
+
+        // set the MSI bunch processor instance
+        $this->msiBunchProcessor = $msiBunchProcessor;
+
+        // pass the instances through to the parent instance
+        parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers, $emitter);
+    }
+
+    /**
+     * Returns the MSI bunch processor instance.
+     *
+     * @return \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface The MSI bunch processor instance
+     */
+    protected function getMsiBunchProcessor()
+    {
+        return $this->msiBunchProcessor;
+    }
 
     /**
      * Set's the ID of the source item that has been created recently.
@@ -96,6 +148,59 @@ abstract class AbstractMsiSubject extends AbstractSubject
     public function addSkuSourceItemIdMapping($sku, $sourceCode)
     {
         $this->skuSourceItemIdMapping[$sku][$sourceCode] = $this->getLastSourceItemId();
+    }
+
+    /**
+     * Queries whether or not the inventory source with the passed code is available.
+     *
+     * @param string $sourceCode The code of the inventory source to query for
+     *
+     * @return boolean TRUE if the inventory source with the passed code is available, FALSE if not
+     */
+    public function hasInventorySource($sourceCode)
+    {
+        return isset($this->inventorySources[$sourceCode]);
+    }
+
+    /**
+     * Returns the inventory source with the passed code.
+     *
+     * @param string $sourceCode The code of the inventory source to return
+     *
+     * @return array The inventory source for the passed code
+     * @throws \Exception Is thrown, if the inventory source with the passed code is NOT available
+     */
+    public function getInventorySourceBySourceCode($sourceCode)
+    {
+
+        // query whether or not the inventory source is available
+        if (isset($this->inventorySources[$sourceCode])) {
+            return $this->inventorySources[$sourceCode];
+        }
+
+        // throw a new exception
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t load inventory source with code "%s"', $sourceCode)
+            )
+        );
+    }
+
+    /**
+     * Intializes the previously loaded global data for exactly one bunch.
+     *
+     * @param string $serial The serial of the actual import
+     *
+     * @return void
+     */
+    public function setUp($serial)
+    {
+
+        // invoke the parent method
+        parent::setUp($serial);
+
+        // load the available inventory sources
+        $this->inventorySources = $this->getMsiBunchProcessor()->loadInventorySources();
     }
 
     /**

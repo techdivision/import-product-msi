@@ -54,6 +54,20 @@ class SqlStatementKeys extends \TechDivision\Import\Product\Utils\SqlStatementKe
     const DELETE_INVENTORY_SOURCE_ITEM = 'delete.inventory_source_item';
 
     /**
+     * The SQL statement to delete a MSI inventory source item by its SKU and source code.
+     *
+     * @var string
+     */
+    const DELETE_INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE = 'delete.inventory_source_item.by.sku.and.source_code';
+
+    /**
+     * The SQL statement to load the available MSI inventory sources.
+     *
+     * @var string
+     */
+    const INVENTORY_SOURCES = 'inventory_sources';
+
+    /**
      * The SQL statement to load a MSI inventory source item by its source item ID.
      *
      * @var string
