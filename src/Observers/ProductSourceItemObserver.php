@@ -39,7 +39,7 @@ class ProductSourceItemObserver extends AbstractMsiImportObserver
      *
      * @var string
      */
-    const ARTEFACT_TYPE = 'product-import-inventory-msi';
+    const ARTEFACT_TYPE = 'inventory-msi';
 
     /**
      * Process the observer's business logic.
@@ -53,7 +53,7 @@ class ProductSourceItemObserver extends AbstractMsiImportObserver
         $artefacts = array();
 
         // Unserialize the inventory source item data from from the column that looks like
-        // source_code=default,quantity=10.0,status=1|source_code=default,quantity=11.0,status=0
+        //   source_code=default,quantity=10.0,status=1|source_code=default,quantity=11.0,status=0
         $msiInventorySources = $this->getValue(ColumnKeys::INVENTORY_SOURCE_ITEMS, array(), function ($value) {
             return $this->explode($value, '|');
         });
