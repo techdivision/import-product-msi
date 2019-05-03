@@ -72,10 +72,11 @@ abstract class AbstractMsiSubject extends AbstractSubject
     /**
      * Initialize the subject instance.
      *
-     * @param \TechDivision\Import\Services\RegistryProcessorInterface $registryProcessor          The registry processor instance
-     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface $coreConfigDataUidGenerator The UID generator for the core config data
-     * @param \Doctrine\Common\Collections\Collection                  $systemLoggers              The array with the system loggers instances
-     * @param \League\Event\EmitterInterface                           $emitter                    The event emitter instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface             $registryProcessor          The registry processor instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface             $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param \Doctrine\Common\Collections\Collection                              $systemLoggers              The array with the system loggers instances
+     * @param \League\Event\EmitterInterface                                       $emitter                    The event emitter instance
+     * @param \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface $msiBunchProcessor          The MSI bunch processor instance
      */
     public function __construct(
         RegistryProcessorInterface $registryProcessor,
