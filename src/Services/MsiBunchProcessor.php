@@ -69,7 +69,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
      * Initialize the processor with the necessary assembler and repository instances.
      *
      * @param \TechDivision\Import\Connection\ConnectionInterface                                  $connection                    The connection to use
-     * @param \TechDivision\Import\Product\Msi\Repositories\InventorySourceRepositoryInterface     $inventorySourceItemRepository The inventory source repository instance
+     * @param \TechDivision\Import\Product\Msi\Repositories\InventorySourceRepositoryInterface     $inventorySourceRepository     The inventory source repository instance
      * @param \TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface $inventorySourceItemRepository The inventory source item repository instance
      * @param \TechDivision\Import\Actions\ActionInterface                                         $inventorySourceItemAction     The inventory source item action instance
      */
