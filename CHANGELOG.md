@@ -1,3 +1,13 @@
+# Version 5.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to techdivision/import-product 10.0.* version as dependency
+
 # Version 4.0.0
 
 ## Bugfixes
