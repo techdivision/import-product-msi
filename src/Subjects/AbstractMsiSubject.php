@@ -219,7 +219,7 @@ abstract class AbstractMsiSubject extends AbstractSubject
 
         // update the status
         $registryProcessor->mergeAttributesRecursive(
-            $serial,
+            RegistryKeys::STATUS,
             array(
                 RegistryKeys::SKU_SOURCE_ITEM_ID_MAPPING => $this->skuSourceItemIdMapping
             )
