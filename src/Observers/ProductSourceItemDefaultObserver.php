@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Msi\Observers\ProductSourceItemObserver
+ * TechDivision\Import\Product\Msi\Observers\ProductSourceItemDefaultObserver
  *
  * NOTICE OF LICENSE
  *
@@ -32,7 +32,7 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
  */
-class ProductSourceItemObserver extends AbstractProductImportObserver
+class ProductSourceItemDefaultObserver extends AbstractProductImportObserver
 {
 
     /**
@@ -58,29 +58,21 @@ class ProductSourceItemObserver extends AbstractProductImportObserver
         // initialize the array for the artefacts and the store view codes
         $artefacts = array();
 
-        // Unserialize the inventory source item data from from the column that looks like
-        //   source_code=default,quantity=10.0,status=1|source_code=default,quantity=11.0,status=0
-        $msiInventorySources = $this->getValue(ColumnKeys::INVENTORY_SOURCE_ITEMS, array(), function ($value) {
-            return $this->explode($value, '|');
-        });
-
-        // iterate over the found inventory source items
-        foreach ($msiInventorySources as $msiInventorySource) {
-            // explode the key => values pairs
-            $extractedColumns = $this->explode($msiInventorySource);
-            // initialize the array with the column we want to export
-            $columns = array(ColumnKeys::SKU => $this->getValue(ColumnKeys::SKU));
-            // append the extracted values to the array
-            foreach ($extractedColumns as $extractedColumn) {
-                // extract key => value pair
-                list ($key, $value) = $this->explode($extractedColumn, '=');
-                // append the key => value pair
-                $columns[$key] = $value;
-            }
-
-            // create a new artefact with the column information
-            $artefacts[] = $this->newArtefact($columns, array());
-        }
+        // create a new artefact with the column information
+        $artefacts[] = $this->newArtefact(
+            array(
+                ColumnKeys::SKU         => $this->getValue(ColumnKeys::SKU),
+                ColumnKeys::SOURCE_CODE => 'default',
+                ColumnKeys::STATUS      => 1,
+                ColumnKeys::QUANTITY    => $this->getValue(ColumnKeys::QTY, 0)
+            ),
+            array(
+                ColumnKeys::SKU         => ColumnKeys::SKU,
+                ColumnKeys::SOURCE_CODE => null,
+                ColumnKeys::STATUS      => null,
+                ColumnKeys::QUANTITY    => ColumnKeys::QTY
+            )
+        );
 
         // append the artefacts that has to be exported to the subject
         $this->addArtefacts($artefacts);

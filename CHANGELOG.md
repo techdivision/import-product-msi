@@ -1,3 +1,13 @@
+# Version 9.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add new default source item export observer for Magento 2.3.2 compatibility
+
 # Version 8.0.0
 
 ## Bugfixes
