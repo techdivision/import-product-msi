@@ -1,3 +1,14 @@
+# Version 10.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to techdivision/import-product 15.* version as dependency
+* Move library specific DI identifiers from techdivision/import-product to thhis library
+
 # Version 9.0.0
 
 ## Bugfixes
