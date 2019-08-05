@@ -1,3 +1,13 @@
+# Version 11.0.0
+
+## Bugfixes
+
+* Add missing DI configuration for composite delete observer
+
+## Features
+
+* Switch to techdivision/import-product 16.* version as dependency
+
 # Version 10.0.0
 
 ## Bugfixes

@@ -54,6 +54,15 @@
         </service>
 
         <!--
+         | The DI configuration for the composite observers of the delete operation.
+         |-->
+        <service id="import_product_msi.observer.composite.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_msi.observer.clear.inventory.source.item" type="service"/>
+            </call>
+        </service>
+
+        <!--
          | The DI configuration for the composite observers of the replace operation.
          |-->
         <service id="import_product_msi.observer.composite.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
