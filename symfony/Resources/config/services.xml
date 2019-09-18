@@ -5,7 +5,9 @@
 
     <services>
 
-        <service id="import_product_msi.repository.sql.statement" class="TechDivision\Import\Product\Msi\Repositories\SqlStatementRepository"/>
+        <service id="import_product_msi.repository.sql.statement" class="TechDivision\Import\Product\Msi\Repositories\SqlStatementRepository">
+            <argument type="service" id="import.util.sql.compilers"/>
+        </service>
         <service id="import_product_msi.repository.inventory.source" class="TechDivision\Import\Product\Msi\Repositories\InventorySourceRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_msi.repository.sql.statement"/>

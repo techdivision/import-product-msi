@@ -1,3 +1,14 @@
+# Version 14.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add techdivision/import-cli-simple#216
+* Switch to techdivision/import-product 19.* version as dependency
+
 # Version 13.0.0
 
 ## Bugfixes
