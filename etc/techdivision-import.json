@@ -60,7 +60,6 @@
           "subjects": [
             {
               "id": "import.subject.move.files",
-              "identifier": "move-files",
               "file-resolver": {
                 "prefix": "product-import-inventory-msi"
               },
@@ -68,7 +67,6 @@
             },
             {
               "id": "import_product_msi.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "product-import-inventory-msi"
               },
@@ -98,7 +96,6 @@
           "subjects": [
             {
               "id": "import.subject.move.files",
-              "identifier": "move-files",
               "file-resolver": {
                 "prefix": "product-import-inventory-msi"
               },
@@ -106,7 +103,6 @@
             },
             {
               "id": "import_product_msi.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "product-import-inventory-msi"
               },
@@ -137,7 +133,6 @@
           "subjects": [
             {
               "id": "import.subject.move.files",
-              "identifier": "move-files",
               "file-resolver": {
                 "prefix": "product-import-inventory-msi"
               },
@@ -145,7 +140,6 @@
             },
             {
               "id": "import_product_msi.subject.bunch",
-              "identifier": "files",
               "file-resolver": {
                 "prefix": "product-import-inventory-msi"
               },
