@@ -1,0 +1,102 @@
+{
+  "shortcuts": {
+    "general": {
+      "catalog_product_inventory_msi": {
+        "delete": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_product_inventory_msi/delete",
+          "general/general/archive-artefacts"
+        ],
+        "replace": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_product_inventory_msi/replace",
+          "general/general/archive-artefacts"
+        ],
+        "add-update": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_product_inventory_msi/add-update",
+          "general/general/archive-artefacts"
+        ]
+      }
+    }
+  },
+  "operations": {
+    "general": {
+      "catalog_product_inventory_msi": [
+        {
+          "name": "delete",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.clear.inventory.source.item"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.clear.inventory.source.item",
+                        "import_product_msi.observer.inventory.source.item"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.inventory.source.item.update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
