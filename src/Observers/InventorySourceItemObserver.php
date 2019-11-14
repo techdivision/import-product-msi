@@ -23,6 +23,7 @@ namespace TechDivision\Import\Product\Msi\Observers;
 use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
 use TechDivision\Import\Product\Msi\Utils\MemberNames;
 use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
+use TechDivision\Import\Observers\StateDetectorInterface;
 
 /**
  * Observer that prepares the MSI source item information found in the CSV file.
@@ -47,10 +48,16 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
      * Initialize the observer with the passed MSI bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface $msiBunchProcessor The MSI bunch processor instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector     The state detector instance to use
      */
-    public function __construct(MsiBunchProcessorInterface $msiBunchProcessor)
+    public function __construct(MsiBunchProcessorInterface $msiBunchProcessor, StateDetectorInterface $stateDetector = null)
     {
+
+        // initialize the bunch processor instance
         $this->msiBunchProcessor = $msiBunchProcessor;
+
+        // pass the state detector to the parent method
+        parent::__construct($stateDetector);
     }
 
     /**
@@ -83,8 +90,9 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
         // query whether or not the inventory source is with the given code is avaiable
         if ($this->hasInventorySource($sourceCode)) {
             // create the MSI inventory source item
-            $inventorySourceItem = $this->initializeInventorySourceItem($this->prepareAttributes());
-            $this->persistInventorySourceItem($inventorySourceItem);
+            if ($this->hasChanges($inventorySourceItem = $this->initializeInventorySourceItem($this->prepareAttributes()))) {
+                $this->persistInventorySourceItem($inventorySourceItem);
+            }
 
             // finaly, add the SKU + source code => source item ID mapping
             $this->addSkuSourceItemIdMapping($sku, $sourceCode);
