@@ -24,6 +24,7 @@ use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
 use TechDivision\Import\Product\Msi\Utils\MemberNames;
 use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
 use TechDivision\Import\Observers\StateDetectorInterface;
+use TechDivision\Import\Utils\BackendTypeKeys;
 
 /**
  * Observer that prepares the MSI source item information found in the CSV file.
@@ -94,7 +95,7 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
                 $this->persistInventorySourceItem($inventorySourceItem);
             }
 
-            // finaly, add the SKU + source code => source item ID mapping
+            // finally, add the SKU + source code => source item ID mapping
             $this->addSkuSourceItemIdMapping($sku, $sourceCode);
         } else {
             // throw a new exception
@@ -116,9 +117,9 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
 
         // load the MSI inventory source item values
         $sku = $this->getValue(ColumnKeys::SKU);
-        $status = $this->getValue(ColumnKeys::STATUS);
         $sourceCode = $this->getValue(ColumnKeys::SOURCE_CODE);
-        $quantity = $this->getValue(ColumnKeys::QUANTITY);
+        $status = $this->castValueByBackendType(BackendTypeKeys::BACKEND_TYPE_INT, $this->getValue(ColumnKeys::STATUS));
+        $quantity = $this->castValueByBackendType(BackendTypeKeys::BACKEND_TYPE_FLOAT, $this->getValue(ColumnKeys::QUANTITY));
 
         // return the prepared MSI inventory source item
         return $this->initializeEntity(

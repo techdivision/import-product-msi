@@ -20,13 +20,13 @@
 
 namespace TechDivision\Import\Product\Msi\Subjects;
 
-use TechDivision\Import\Subjects\AbstractSubject;
-use TechDivision\Import\Product\Msi\Utils\RegistryKeys;
-use TechDivision\Import\Services\RegistryProcessorInterface;
-use Doctrine\Common\Collections\Collection;
 use League\Event\EmitterInterface;
-use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
+use Doctrine\Common\Collections\Collection;
+use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
+use TechDivision\Import\Services\RegistryProcessorInterface;
+use TechDivision\Import\Product\Msi\Utils\RegistryKeys;
+use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
 
 /**
  * The abstract subject implementation that provides basic MSI inventory source item
@@ -38,7 +38,7 @@ use TechDivision\Import\Utils\Generators\GeneratorInterface;
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
  */
-abstract class AbstractMsiSubject extends AbstractSubject
+abstract class AbstractMsiSubject extends AbstractEavSubject
 {
 
     /**
