@@ -1,32 +1,10 @@
 {
-  "shortcuts": {
-    "general": {
-      "catalog_product_inventory_msi": {
-        "delete": [
-          "general/general/global-data",
-          "general/general/move-files",
-          "general/catalog_product_inventory_msi/delete"
-        ],
-        "replace": [
-          "general/general/global-data",
-          "general/general/move-files",
-          "general/catalog_product_inventory_msi/replace"
-        ],
-        "add-update": [
-          "general/general/global-data",
-          "general/general/move-files",
-          "general/catalog_product_inventory_msi/add-update"
-        ]
-      }
-    }
-  },
   "operations": {
     "general": {
-      "catalog_product_inventory_msi": [
-        {
-          "name": "delete",
-          "plugins": [
-            {
+      "catalog_product_inventory_msi": {
+        "delete": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -44,12 +22,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace",
-          "plugins": [
-            {
+        "replace": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -68,12 +45,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update",
-          "plugins": [
-            {
+        "add-update": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -91,9 +67,9 @@
                 }
               ]
             }
-          ]
+          }
         }
-      ]
+      }
     }
   }
 }
