@@ -26,11 +26,13 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 /**
  * Observer that extracts the MSI source item data to a specific CSV file.
  *
- * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2019 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-product-msi
- * @link      http://www.techdivision.com
+ * @author     Tim Wagner <t.wagner@techdivision.com>
+ * @copyright  2019 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       https://github.com/techdivision/import-product-msi
+ * @link       http://www.techdivision.com
+ * @deprecated Since version 13.0.1
+ * @see        \TechDivision\Import\Product\Msi\Observers\ProductSourceItemObserver
  */
 class ProductSourceItemDefaultObserver extends AbstractProductImportObserver
 {

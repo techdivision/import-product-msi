@@ -1,3 +1,13 @@
+# Version 13.0.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add functionality to create a default value for column inventory_source_items, if empty (to replace actual default observer)
+
 # Version 13.0.0
 
 ## Bugfixes

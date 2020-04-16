@@ -55,12 +55,29 @@ class ProductSourceItemObserver extends AbstractProductImportObserver
             return;
         }
 
-        // initialize the array for the artefacts and the store view codes
+        // initialize the array for the artefacts
+        // and the default values for the MSI data
         $artefacts = array();
+        $defaultValue = array();
 
-        // Unserialize the inventory source item data from from the column that looks like
+        // initialize a default value in case the column with the MSI
+        // data is NOT available, that looks like
+        //   source_code=default,status=1,quantity=<value-from-column-qty-if-available>
+        if ($this->hasHeader(ColumnKeys::INVENTORY_SOURCE_ITEMS) === false) {
+            $defaultValue = array(
+                sprintf(
+                    '%s=default,%s=1,%s=%d',
+                    ColumnKeys::SOURCE_CODE,
+                    ColumnKeys::STATUS,
+                    ColumnKeys::QUANTITY,
+                    $this->hasValue(ColumnKeys::QTY) ? $this->getValue(ColumnKeys::QTY, 0) : 0
+                )
+            );
+        }
+
+        // unserialize the inventory source item data from the column that looks like
         //   source_code=default,quantity=10.0,status=1|source_code=default,quantity=11.0,status=0
-        $msiInventorySources = $this->getValue(ColumnKeys::INVENTORY_SOURCE_ITEMS, array(), function ($value) {
+        $msiInventorySources = $this->getValue(ColumnKeys::INVENTORY_SOURCE_ITEMS, $defaultValue, function ($value) {
             return $this->explode($value, '|');
         });
 
