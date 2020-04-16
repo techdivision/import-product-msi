@@ -1,3 +1,14 @@
+# Version 15.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to techdivision/import-product 20.* version as dependency
+* Add functionality to create a default value for column inventory_source_items, if empty (to replace actual default observer)
+
 # Version 14.0.1
 
 ## Bugfixes

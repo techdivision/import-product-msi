@@ -20,8 +20,12 @@
 
 namespace TechDivision\Import\Product\Msi\Observers;
 
+use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
+use TechDivision\Import\Product\Msi\Utils\MemberNames;
+use TechDivision\Import\Observers\ObserverFactoryInterface;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
 
 /**
  * Observer that extracts the MSI source item data to a specific CSV file.
@@ -32,7 +36,7 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
  */
-class ProductSourceItemObserver extends AbstractProductImportObserver
+class ProductSourceItemObserver extends AbstractProductImportObserver implements ObserverFactoryInterface
 {
 
     /**
@@ -41,6 +45,71 @@ class ProductSourceItemObserver extends AbstractProductImportObserver
      * @var string
      */
     const ARTEFACT_TYPE = 'inventory-msi';
+
+    /**
+     * The bunch processor instance.
+     *
+     * @var \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface
+     */
+    protected $processor;
+
+    /**
+     * The array for the inventory source templates, used if the column with the
+     * inventory source data is NOT part of the actual file.
+     *
+     * @var array
+     */
+    protected $templateDefaultValues = array();
+
+    /**
+     * Initializes the observer with the bunch processor instance.
+     *
+     * @param \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface $processor The bunch processor instance
+     */
+    public function __construct(MsiBunchProcessorInterface $processor)
+    {
+        $this->processor = $processor;
+    }
+
+    /**
+     * Will be invoked by the observer visitor when a factory has been defined to create the observer instance.
+     *
+     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
+     *
+     * @return \TechDivision\Import\Observers\ObserverInterface The observer instance
+     */
+    public function createObserver(SubjectInterface $subject)
+    {
+
+        // load the available inventory sources
+        $inventorySources = $this->getProcessor()->loadInventorySources();
+
+        // initialize the template for the inventory source
+        // column, used if the column is NOT part of the file
+        foreach ($inventorySources as $inventorySource) {
+            // initialize the default values
+            $defaultValue = array(
+                sprintf('%s=%s', ColumnKeys::SOURCE_CODE, $inventorySource[MemberNames::SOURCE_CODE]),
+                sprintf('%s=1', ColumnKeys::STATUS),
+                sprintf('%s=%%d', ColumnKeys::QUANTITY)
+            );
+            // concatenate them with the multiple field delimiter and add them to the array with the templates
+            $this->templateDefaultValues[] = implode($subject->getMultipleFieldDelimiter(), $defaultValue);
+        }
+
+        // return the instance itself
+        return $this;
+    }
+
+    /**
+     *  Return the bunch processor instance.
+     *
+     * @return \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface The bunch processor instance
+     */
+    protected function getProcessor()
+    {
+        return $this->processor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -55,12 +124,21 @@ class ProductSourceItemObserver extends AbstractProductImportObserver
             return;
         }
 
-        // initialize the array for the artefacts and the store view codes
+        // initialize the array for the artefacts
+        // and the default values for the MSI data
         $artefacts = array();
+        $defaultValues = array();
 
-        // Unserialize the inventory source item data from from the column that looks like
+        // initialize a default value in case the column with the MSI
+        // data is NOT available, that looks like
+        //   source_code=default,status=1,quantity=<value-from-column-qty-if-available>
+        if ($this->hasHeader(ColumnKeys::INVENTORY_SOURCE_ITEMS) === false) {
+            $defaultValues = $this->loadDefaultValues($this->getValue(ColumnKeys::QTY, 0));
+        }
+
+        // unserialize the inventory source item data from the column that looks like
         //   source_code=default,quantity=10.0,status=1|source_code=default,quantity=11.0,status=0
-        $msiInventorySources = $this->getValue(ColumnKeys::INVENTORY_SOURCE_ITEMS, array(), function ($value) {
+        $msiInventorySources = $this->getValue(ColumnKeys::INVENTORY_SOURCE_ITEMS, $defaultValues, function ($value) {
             return $this->explode($value, '|');
         });
 
@@ -84,6 +162,21 @@ class ProductSourceItemObserver extends AbstractProductImportObserver
 
         // append the artefacts that has to be exported to the subject
         $this->addArtefacts($artefacts);
+    }
+
+    /**
+     * Process the template and set the passed quantity for each
+     * configured inventory source and return the default values.
+     *
+     * @param integer $qty The quantity to initialze the template with
+     *
+     * @return array The initialized array with the default values
+     */
+    protected function loadDefaultValues(int $qty) : array
+    {
+        return array_map(function ($value) use ($qty) {
+            return sprintf($value, $qty);
+        }, $this->templateDefaultValues);
     }
 
     /**
