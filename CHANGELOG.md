@@ -1,3 +1,13 @@
+# Version 18.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import-product 23.* version as dependency
+
 # Version 17.0.0
 
 ## Bugfixes
