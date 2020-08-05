@@ -42,22 +42,22 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
     private $statements = array(
         SqlStatementKeys::INVENTORY_SOURCE_ITEM =>
             'SELECT *
-               FROM inventory_source_item
+               FROM ${table:inventory_source_item}
               WHERE source_item_id = :source_item_id',
         SqlStatementKeys::INVENTORY_SOURCES =>
             'SELECT *
-               FROM inventory_source',
+               FROM ${table:inventory_source}',
         SqlStatementKeys::INVENTORY_SOURCE_ITEMS =>
             'SELECT *
-               FROM inventory_source_item',
+               FROM ${table:inventory_source_item}',
         SqlStatementKeys::INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE =>
             'SELECT *
-               FROM inventory_source_item
+               FROM ${table:inventory_source_item}
               WHERE sku = :sku
                 AND source_code = :source_code',
         SqlStatementKeys::CREATE_INVENTORY_SOURCE_ITEM =>
             'INSERT
-               INTO inventory_source_item
+               INTO ${table:inventory_source_item}
                     (source_code,
                      sku,
                      quantity,
@@ -67,7 +67,7 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
                      :quantity,
                      :status)',
         SqlStatementKeys::UPDATE_INVENTORY_SOURCE_ITEM =>
-            'UPDATE inventory_source_item
+            'UPDATE ${table:inventory_source_item}
                 SET source_code = :source_code,
                     sku = :sku,
                     quantity = :quantity,
@@ -75,27 +75,27 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
               WHERE source_item_id = :source_item_id',
         SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM =>
             'DELETE
-               FROM inventory_source_item
+               FROM ${table:inventory_source_item}
               WHERE source_item_id = :source_item_id',
         SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE =>
             'DELETE
-               FROM inventory_source_item
+               FROM ${table:inventory_source_item}
               WHERE sku = :sku
                 AND source_code = :source_code'
     );
 
     /**
-     * Initialize the the SQL statements.
+     * Initializes the SQL statement repository with the primary key and table prefix utility.
+     *
+     * @param \IteratorAggregate<\TechDivision\Import\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
      */
-    public function __construct()
+    public function __construct(\IteratorAggregate $compilers)
     {
 
-        // call the parent constructor
-        parent::__construct();
+        // pass primary key + table prefix utility to parent instance
+        parent::__construct($compilers);
 
-        // merge the class statements
-        foreach ($this->statements as $key => $statement) {
-            $this->preparedStatements[$key] = $statement;
-        }
+        // compile the SQL statements
+        $this->compile($this->statements);
     }
 }

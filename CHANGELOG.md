@@ -1,4 +1,4 @@
-# Version 13.0.1
+# Version 19.0.0
 
 ## Bugfixes
 
@@ -6,7 +6,71 @@
 
 ## Features
 
+* Switch to latest techdivision/import-product 24.* version as dependency
+
+# Version 18.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import-product 23.* version as dependency
+
+# Version 17.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import-product 22.* version as dependency
+
+# Version 16.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import-product 21.* version as dependency
+
+# Version 15.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to techdivision/import-product 20.* version as dependency
 * Add functionality to create a default value for column inventory_source_items, if empty (to replace actual default observer)
+
+# Version 14.0.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Extract dev autoloading
+
+# Version 14.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove deprecated classes and methods
+* Add techdivision/import-cli-simple#216
+* Remove unnecessary identifiers from configuration
+* Switch to techdivision/import-product 19.* version as dependency
 
 # Version 13.0.0
 

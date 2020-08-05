@@ -23,6 +23,8 @@ namespace TechDivision\Import\Product\Msi\Observers;
 use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
 use TechDivision\Import\Product\Msi\Utils\MemberNames;
 use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
+use TechDivision\Import\Observers\StateDetectorInterface;
+use TechDivision\Import\Utils\BackendTypeKeys;
 
 /**
  * Observer that prepares the MSI source item information found in the CSV file.
@@ -47,10 +49,16 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
      * Initialize the observer with the passed MSI bunch processor instance.
      *
      * @param \TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface $msiBunchProcessor The MSI bunch processor instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null           $stateDetector     The state detector instance to use
      */
-    public function __construct(MsiBunchProcessorInterface $msiBunchProcessor)
+    public function __construct(MsiBunchProcessorInterface $msiBunchProcessor, StateDetectorInterface $stateDetector = null)
     {
+
+        // initialize the bunch processor instance
         $this->msiBunchProcessor = $msiBunchProcessor;
+
+        // pass the state detector to the parent method
+        parent::__construct($stateDetector);
     }
 
     /**
@@ -83,10 +91,11 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
         // query whether or not the inventory source is with the given code is avaiable
         if ($this->hasInventorySource($sourceCode)) {
             // create the MSI inventory source item
-            $inventorySourceItem = $this->initializeInventorySourceItem($this->prepareAttributes());
-            $this->persistInventorySourceItem($inventorySourceItem);
+            if ($this->hasChanges($inventorySourceItem = $this->initializeInventorySourceItem($this->prepareAttributes()))) {
+                $this->persistInventorySourceItem($inventorySourceItem);
+            }
 
-            // finaly, add the SKU + source code => source item ID mapping
+            // finally, add the SKU + source code => source item ID mapping
             $this->addSkuSourceItemIdMapping($sku, $sourceCode);
         } else {
             // throw a new exception
@@ -108,9 +117,9 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
 
         // load the MSI inventory source item values
         $sku = $this->getValue(ColumnKeys::SKU);
-        $status = $this->getValue(ColumnKeys::STATUS);
         $sourceCode = $this->getValue(ColumnKeys::SOURCE_CODE);
-        $quantity = $this->getValue(ColumnKeys::QUANTITY);
+        $status = $this->castValueByBackendType(BackendTypeKeys::BACKEND_TYPE_INT, $this->getValue(ColumnKeys::STATUS));
+        $quantity = $this->castValueByBackendType(BackendTypeKeys::BACKEND_TYPE_FLOAT, $this->getValue(ColumnKeys::QUANTITY));
 
         // return the prepared MSI inventory source item
         return $this->initializeEntity(

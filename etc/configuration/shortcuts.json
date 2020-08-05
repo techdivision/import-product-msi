@@ -1,0 +1,23 @@
+{
+  "shortcuts": {
+    "general": {
+      "catalog_product_inventory_msi": {
+        "delete": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_product_inventory_msi/delete"
+        ],
+        "replace": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_product_inventory_msi/replace"
+        ],
+        "add-update": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_product_inventory_msi/add-update"
+        ]
+      }
+    }
+  }
+}

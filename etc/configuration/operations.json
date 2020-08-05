@@ -1,0 +1,75 @@
+{
+  "operations": {
+    "general": {
+      "catalog_product_inventory_msi": {
+        "delete": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.clear.inventory.source.item"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "replace": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.clear.inventory.source.item",
+                        "import_product_msi.observer.inventory.source.item"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "add-update": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_product_msi.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "product-import-inventory-msi"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_product_msi.observer.inventory.source.item.update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
