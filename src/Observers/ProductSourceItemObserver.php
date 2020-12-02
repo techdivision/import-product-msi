@@ -82,20 +82,22 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
     {
 
         // load the available inventory sources
-        $inventorySources = $this->getProcessor()->loadInventorySources();
+        try {
+            $inventorySources = $this->getProcessor()->loadInventorySources();
 
-        // initialize the template for the inventory source
-        // column, used if the column is NOT part of the file
-        foreach ($inventorySources as $inventorySource) {
-            // initialize the default values
-            $defaultValue = array(
-                sprintf('%s=%s', ColumnKeys::SOURCE_CODE, $inventorySource[MemberNames::SOURCE_CODE]),
-                sprintf('%s=1', ColumnKeys::STATUS),
-                sprintf('%s=%%d', ColumnKeys::QUANTITY)
-            );
-            // concatenate them with the multiple field delimiter and add them to the array with the templates
-            $this->templateDefaultValues[] = implode($subject->getMultipleFieldDelimiter(), $defaultValue);
-        }
+            // initialize the template for the inventory source
+            // column, used if the column is NOT part of the file
+            foreach ($inventorySources as $inventorySource) {
+                // initialize the default values
+                $defaultValue = [
+                    sprintf('%s=%s', ColumnKeys::SOURCE_CODE, $inventorySource[MemberNames::SOURCE_CODE]),
+                    sprintf('%s=1', ColumnKeys::STATUS),
+                    sprintf('%s=%%d', ColumnKeys::QUANTITY),
+                ];
+                // concatenate them with the multiple field delimiter and add them to the array with the templates
+                $this->templateDefaultValues[] = implode($subject->getMultipleFieldDelimiter(), $defaultValue);
+            }
+        } catch (\Exception $exception) { /* no inventory source available -> just skip */ }
 
         // return the instance itself
         return $this;
