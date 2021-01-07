@@ -49,7 +49,7 @@ interface MsiBunchProcessorInterface
     /**
      * Return's the action with the inventory source item CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getInventorySourceItemAction();
 

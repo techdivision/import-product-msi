@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Msi\Repositories;
 
-use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Dbal\Repositories\RepositoryInterface;
 
 /**
  * Interface for repository implementations to load MSI inventory source item data.

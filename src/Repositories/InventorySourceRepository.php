@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Msi\Repositories;
 
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Dbal\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Msi\Utils\MemberNames;
 use TechDivision\Import\Product\Msi\Utils\SqlStatementKeys;
 
