@@ -17,17 +17,30 @@
             <argument type="service" id="import_product_msi.repository.sql.statement"/>
         </service>
 
-        <service id="import_product_msi.action.processor.inventory.source.item.create" class="TechDivision\Import\Product\Msi\Actions\Processors\InventorySourceItemCreateProcessor">
+        <service id="import_product_msi.action.processor.inventory.source.item.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_msi.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Msi\Utils\SqlStatementKeys::CREATE_INVENTORY_SOURCE_ITEM</argument>
+            </argument>
         </service>
-        <service id="import_product_msi.action.processor.inventory.source.item.delete" class="TechDivision\Import\Product\Msi\Actions\Processors\InventorySourceItemDeleteProcessor">
+        <service id="import_product_msi.action.processor.inventory.source.item.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_msi.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Msi\Utils\SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM</argument>
+                <argument type="constant">TechDivision\Import\Product\Msi\Utils\SqlStatementKeys::DELETE_INVENTORY_SOURCE_ITEM_BY_SKU_AND_SOURCE_CODE</argument>
+            </argument>
         </service>
-        <service id="import_product_msi.action.processor.inventory.source.item.update" class="TechDivision\Import\Product\Msi\Actions\Processors\InventorySourceItemUpdateProcessor">
+        <service id="import_product_msi.action.processor.inventory.source.item.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_msi.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Msi\Utils\SqlStatementKeys::UPDATE_INVENTORY_SOURCE_ITEM</argument>
+            </argument>
         </service>
 
         <service id="import_product_msi.action.inventory.source.item" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
