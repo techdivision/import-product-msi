@@ -91,7 +91,7 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
             $defaultValue = array(
                 sprintf('%s=%s', ColumnKeys::SOURCE_CODE, $inventorySource[MemberNames::SOURCE_CODE]),
                 sprintf('%s=1', ColumnKeys::STATUS),
-                sprintf('%s=%%d', ColumnKeys::QUANTITY)
+                sprintf('%s=%%f', ColumnKeys::QUANTITY)
             );
             // concatenate them with the multiple field delimiter and add them to the array with the templates
             $this->templateDefaultValues[] = implode($subject->getMultipleFieldDelimiter(), $defaultValue);
@@ -168,11 +168,11 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
      * Process the template and set the passed quantity for each
      * configured inventory source and return the default values.
      *
-     * @param integer $qty The quantity to initialze the template with
+     * @param float $qty The quantity to initialize the template with
      *
      * @return array The initialized array with the default values
      */
-    protected function loadDefaultValues(int $qty) : array
+    protected function loadDefaultValues(float $qty) : array
     {
         return array_map(function ($value) use ($qty) {
             return sprintf($value, $qty);
@@ -180,7 +180,7 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
     }
 
     /**
-     * Create's and return's a new empty artefact entity.
+     * Creates and returns a new empty artefact entity.
      *
      * @param array $columns             The array with the column data
      * @param array $originalColumnNames The array with a mapping from the old to the new column names

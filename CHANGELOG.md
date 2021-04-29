@@ -1,3 +1,13 @@
+# Version 19.0.1
+
+## Bugfixes
+
+* Providing decimal values for "qty" results in inconsistencies
+
+## Features
+
+* None
+
 # Version 19.0.0
 
 ## Bugfixes
