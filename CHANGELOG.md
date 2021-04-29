@@ -2,7 +2,7 @@
 
 ## Bugfixes
 
-* None
+* Providing decimal values for "qty" results in inconsistencies
 
 ## Features
 
