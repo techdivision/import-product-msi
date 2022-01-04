@@ -34,45 +34,46 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * The repository to load the products with.
      *
-     * @var \TechDivision\Import\Product\Repositories\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
-     * @var \TechDivision\Import\Dbal\Connection\ConnectionInterface
+     * @var ConnectionInterface
      */
     protected $connection;
 
     /**
      * The repository to access inventory sources.
      *
-     * @var \TechDivision\Import\Product\Msi\Repositories\InventorySourceRepositoryInterface
+     * @var InventorySourceRepositoryInterface
      */
     protected $inventorySourceRepository;
 
     /**
      * The repository to access inventory source items.
      *
-     * @var \TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface
+     * @var InventorySourceItemRepositoryInterface
      */
     protected $inventorySourceItemRepository;
 
     /**
      * The action for product CRUD methods.
      *
-     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
+     * @var ActionInterface
      */
     protected $inventorySourceItemAction;
 
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface                             $connection                    The connection to use
-     * @param \TechDivision\Import\Product\Msi\Repositories\InventorySourceRepositoryInterface     $inventorySourceRepository     The inventory source repository instance
-     * @param \TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface $inventorySourceItemRepository The inventory source item repository instance
-     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                                    $inventorySourceItemAction     The inventory source item action instance
+     * @param ConnectionInterface                    $connection                    The connection to use
+     * @param InventorySourceRepositoryInterface     $inventorySourceRepository     The inventory source repository instance
+     * @param InventorySourceItemRepositoryInterface $inventorySourceItemRepository The inventory source item repository instance
+     * @param ActionInterface                        $inventorySourceItemAction     The inventory source item action instance
+     * @param ProductRepositoryInterface             $productRepository             The product source repository instance
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -91,7 +92,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Set's the passed connection.
      *
-     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface $connection The connection to set
+     * @param ConnectionInterface $connection The connection to set
      *
      * @return void
      */
@@ -103,7 +104,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Return's the connection.
      *
-     * @return \TechDivision\Import\Dbal\Connection\ConnectionInterface The connection instance
+     * @return ConnectionInterface The connection instance
      */
     public function getConnection()
     {
@@ -157,7 +158,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Set's the repository to load the inventory sources with.
      *
-     * @param \TechDivision\Import\Product\Msi\Repositories\InventorySourceRepositoryInterface $inventorySourceRepository The repository instance
+     * @param InventorySourceRepositoryInterface $inventorySourceRepository The repository instance
      *
      * @return void
      */
@@ -169,7 +170,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Return's the repository to load the inventory sources with.
      *
-     * @return \TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface The repository instance
+     * @return InventorySourceItemRepositoryInterface The repository instance
      */
     public function getInventorySourceRepository()
     {
@@ -179,7 +180,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Set's the repository to load the inventory source items with.
      *
-     * @param \TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface $inventorySourceItemRepository The repository instance
+     * @param InventorySourceItemRepositoryInterface $inventorySourceItemRepository The repository instance
      *
      * @return void
      */
@@ -191,7 +192,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Return's the repository to load the inventory source items with.
      *
-     * @return \TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface The repository instance
+     * @return InventorySourceItemRepositoryInterface The repository instance
      */
     public function getInventorySourceItemRepository()
     {
@@ -201,7 +202,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Set's the action with the inventory source item CRUD methods.
      *
-     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $inventorySourceItemAction The action instance
+     * @param ActionInterface $inventorySourceItemAction The action instance
      *
      * @return void
      */
@@ -213,7 +214,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Return's the action with the inventory source item CRUD methods.
      *
-     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
+     * @return ActionInterface The action instance
      */
     public function getInventorySourceItemAction()
     {
@@ -279,6 +280,13 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
         // not implemented yet
     }
 
+    /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
     public function loadProduct($sku)
     {
         return $this->getProductRepository()->findOneBySku($sku);
@@ -287,7 +295,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Set's the repository to load the products with.
      *
-     * @param \TechDivision\Import\Product\Repositories\ProductRepositoryInterface $productRepository The repository instance
+     * @param ProductRepositoryInterface $productRepository The repository instance
      *
      * @return void
      */
@@ -299,7 +307,7 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     /**
      * Return's the repository to load the products with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductRepositoryInterface The repository instance
+     * @return ProductRepositoryInterface The repository instance
      */
     public function getProductRepository()
     {
