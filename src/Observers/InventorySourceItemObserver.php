@@ -19,6 +19,7 @@ use TechDivision\Import\Product\Msi\Utils\MemberNames;
 use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Utils\BackendTypeKeys;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Observer that prepares the MSI source item information found in the CSV file.
@@ -77,8 +78,31 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
         $sku = $this->getValue(ColumnKeys::SKU);
         $sourceCode = $this->getValue(ColumnKeys::SOURCE_CODE);
 
+        if ($product = $this->loadProduct($sku)) {
+            $this->setLastEntityId($product[MemberNames::ENTITY_ID]);
+        } else {
+            $message = sprintf('Product with SKU "%s" can\'t be loaded to create source code "%s"', $sku, $sourceCode);
+            // query whether or not we're in debug mode
+            if (!$this->getSubject()->isStrictMode()) {
+                $this->getSubject()->getSystemLogger()->warning($message);
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    ColumnKeys::SKU => $message
+                                )
+                            )
+                        )
+                    )
+                );
+                return $this->getRow();
+            } else {
+                throw new \Exception($this->appendExceptionSuffix($message));
+            }
+        }
         // query whether or not, we've found a new SKU/source code combination => means we've found a inventory source item
-        if ($this->hasBeenProcessed($sku, $sourceCode)) {
+        if ($this->hasSourceBeenProcessed($sku, $sourceCode)) {
             return;
         }
 
@@ -174,5 +198,29 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
     protected function persistInventorySourceItem($inventorySourceItem)
     {
         $this->getMsiBunchProcessor()->persistInventorySourceItem($inventorySourceItem);
+    }
+
+    /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    protected function loadProduct($sku)
+    {
+        return $this->getMsiBunchProcessor()->loadProduct($sku);
+    }
+
+    /**
+     * Set's the ID of the product that has been created recently.
+     *
+     * @param string $lastEntityId The entity ID
+     *
+     * @return void
+     */
+    protected function setLastEntityId($lastEntityId)
+    {
+        $this->getSubject()->setLastEntityId($lastEntityId);
     }
 }

@@ -14,6 +14,9 @@
 
 namespace TechDivision\Import\Product\Msi\Services;
 
+use TechDivision\Import\Product\Repositories\ProductRepositoryInterface;
+use TechDivision\Import\Product\Services\ProductProcessorInterface;
+
 /**
  * Interface for an inventory source item bunch processor.
  *
@@ -23,7 +26,7 @@ namespace TechDivision\Import\Product\Msi\Services;
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
  */
-interface MsiBunchProcessorInterface
+interface MsiBunchProcessorInterface extends ProductProcessorInterface
 {
 
     /**
@@ -90,4 +93,29 @@ interface MsiBunchProcessorInterface
      * @return void
      */
     public function cleanUp();
+
+    /**
+     * Set's the repository to load the products with.
+     *
+     * @param ProductRepositoryInterface $productRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductRepository(ProductRepositoryInterface $productRepository);
+
+    /**
+     * Return's the repository to load the products with.
+     *
+     * @return ProductRepositoryInterface The repository instance
+     */
+    public function getProductRepository();
+
+    /**
+     * Load's and return's the product with the passed SKU.
+     *
+     * @param string $sku The SKU of the product to load
+     *
+     * @return array The product
+     */
+    public function loadProduct($sku);
 }

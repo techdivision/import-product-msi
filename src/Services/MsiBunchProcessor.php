@@ -18,6 +18,7 @@ use TechDivision\Import\Dbal\Actions\ActionInterface;
 use TechDivision\Import\Dbal\Connection\ConnectionInterface;
 use TechDivision\Import\Product\Msi\Repositories\InventorySourceRepositoryInterface;
 use TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryInterface;
+use TechDivision\Import\Product\Repositories\ProductRepositoryInterface;
 
 /**
  * The inventory source item bunch processor implementation.
@@ -30,6 +31,12 @@ use TechDivision\Import\Product\Msi\Repositories\InventorySourceItemRepositoryIn
  */
 class MsiBunchProcessor implements MsiBunchProcessorInterface
 {
+    /**
+     * The repository to load the products with.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductRepositoryInterface
+     */
+    protected $productRepository;
 
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
@@ -71,12 +78,14 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
         ConnectionInterface $connection,
         InventorySourceRepositoryInterface $inventorySourceRepository,
         InventorySourceItemRepositoryInterface $inventorySourceItemRepository,
-        ActionInterface $inventorySourceItemAction
+        ActionInterface $inventorySourceItemAction,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->setConnection($connection);
         $this->setInventorySourceRepository($inventorySourceRepository);
         $this->setInventorySourceItemRepository($inventorySourceItemRepository);
         $this->setInventorySourceItemAction($inventorySourceItemAction);
+        $this->setProductRepository($productRepository);
     }
 
     /**
@@ -268,5 +277,32 @@ class MsiBunchProcessor implements MsiBunchProcessorInterface
     public function cleanUp()
     {
         // not implemented yet
+    }
+
+    public function loadProduct($sku)
+    {
+        return $this->getProductRepository()->findOneBySku($sku);
+    }
+
+    /**
+     * Set's the repository to load the products with.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductRepositoryInterface $productRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductRepository(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
+    /**
+     * Return's the repository to load the products with.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductRepositoryInterface The repository instance
+     */
+    public function getProductRepository()
+    {
+        return $this->productRepository;
     }
 }
