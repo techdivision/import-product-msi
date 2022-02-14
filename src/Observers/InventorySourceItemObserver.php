@@ -97,9 +97,9 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
                     )
                 );
                 return $this->getRow();
-            } else {
-                throw new \Exception($this->appendExceptionSuffix($message));
             }
+
+            throw new \Exception($this->appendExceptionSuffix($message));
         }
         // query whether or not, we've found a new SKU/source code combination => means we've found a inventory source item
         if ($this->hasSourceBeenProcessed($sku, $sourceCode)) {
