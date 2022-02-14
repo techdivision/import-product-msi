@@ -16,7 +16,7 @@ namespace TechDivision\Import\Product\Msi\Subjects;
 
 use League\Event\EmitterInterface;
 use Doctrine\Common\Collections\Collection;
-use TechDivision\Import\Subjects\AbstractEavSubject;
+use TechDivision\Import\Product\Subjects\AbstractProductSubject;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Product\Msi\Utils\RegistryKeys;
@@ -32,7 +32,7 @@ use TechDivision\Import\Product\Msi\Services\MsiBunchProcessorInterface;
  * @link      https://github.com/techdivision/import-product-msi
  * @link      http://www.techdivision.com
  */
-abstract class AbstractMsiSubject extends AbstractEavSubject
+abstract class AbstractMsiSubject extends AbstractProductSubject
 {
 
     /**
@@ -127,7 +127,7 @@ abstract class AbstractMsiSubject extends AbstractEavSubject
      *
      * @return boolean TRUE if the SKU/source code has been processed, else FALSE
      */
-    public function hasBeenProcessed($sku, $sourceCode)
+    public function hasSourceBeenProcessed($sku, $sourceCode)
     {
         return isset($this->skuSourceItemIdMapping[$sku][$sourceCode]);
     }

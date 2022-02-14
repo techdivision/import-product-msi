@@ -66,8 +66,8 @@ abstract class AbstractMsiImportObserver extends AbstractObserver implements Msi
      *
      * @return boolean TRUE if the SKU/source code has been processed, else FALSE
      */
-    protected function hasBeenProcessed($sku, $sourceCode)
+    protected function hasSourceBeenProcessed($sku, $sourceCode)
     {
-        return $this->getSubject()->hasBeenProcessed($sku, $sourceCode);
+        return $this->getSubject()->hasSourceBeenProcessed($sku, $sourceCode);
     }
 }

@@ -54,6 +54,7 @@
             <argument type="service" id="import_product_msi.repository.inventory.source"/>
             <argument type="service" id="import_product_msi.repository.inventory.source.item"/>
             <argument type="service" id="import_product_msi.action.inventory.source.item"/>
+            <argument type="service" id="import_product.repository.product"/>
         </service>
 
         <service id="import_product_msi.observer.product.source.item" class="TechDivision\Import\Product\Msi\Observers\ProductSourceItemObserver">
