@@ -75,8 +75,20 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
     public function createObserver(SubjectInterface $subject)
     {
 
-        // load the available inventory sources
-        $inventorySources = $this->getProcessor()->loadInventorySources();
+        try {
+            // load the available inventory sources
+            $inventorySources = $this->getProcessor()->loadInventorySources();
+        } catch (\Exception $e) {
+            // prepare a log message
+            $message = sprintf(
+                '"%s"',
+                $e->getMessage()
+            );
+            $subject->getSystemLogger()
+                ->error($subject->appendExceptionSuffix($message));
+            // set inventorySources as empty
+            $inventorySources = [];
+        }
 
         // initialize the template for the inventory source
         // column, used if the column is NOT part of the file
@@ -112,6 +124,9 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
      */
     protected function process()
     {
+        if (empty($this->templateDefaultValues)) {
+            return;
+        }
 
         // query whether or not, we've found a new SKU => means we've found a new product
         if ($this->hasBeenProcessed($this->getValue(ColumnKeys::SKU))) {
