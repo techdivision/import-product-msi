@@ -10,7 +10,7 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Link\Observer;
+namespace TechDivision\Import\Product\Msi\Observer;
 
 use PHPUnit\Framework\TestCase;
 
