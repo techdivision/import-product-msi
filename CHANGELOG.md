@@ -1,3 +1,13 @@
+# Version 19.0.2
+
+## Bugfixes
+
+* fix error: catch exception inventory source logic
+
+## Features
+
+* None
+
 # Version 19.0.1
 
 ## Bugfixes
