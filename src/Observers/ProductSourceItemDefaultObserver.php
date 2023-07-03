@@ -60,13 +60,15 @@ class ProductSourceItemDefaultObserver extends AbstractProductImportObserver
                 ColumnKeys::SKU         => $this->getValue(ColumnKeys::SKU),
                 ColumnKeys::SOURCE_CODE => 'default',
                 ColumnKeys::STATUS      => 1,
-                ColumnKeys::QUANTITY    => $this->getValue(ColumnKeys::QTY, 0)
+                ColumnKeys::QUANTITY    => $this->getValue(ColumnKeys::QTY, 0),
+                ColumnKeys::RELATIVE    => $this->getValue(ColumnKeys::QTY_RELATIVE),
             ),
             array(
                 ColumnKeys::SKU         => ColumnKeys::SKU,
                 ColumnKeys::SOURCE_CODE => null,
                 ColumnKeys::STATUS      => null,
-                ColumnKeys::QUANTITY    => ColumnKeys::QTY
+                ColumnKeys::QUANTITY    => ColumnKeys::QTY,
+                ColumnKeys::RELATIVE    => null,
             )
         );
 

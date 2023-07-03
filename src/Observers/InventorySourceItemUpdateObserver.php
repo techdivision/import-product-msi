@@ -14,6 +14,7 @@
 
 namespace TechDivision\Import\Product\Msi\Observers;
 
+use TechDivision\Import\Product\Msi\Utils\ColumnKeys;
 use TechDivision\Import\Product\Msi\Utils\MemberNames;
 
 /**
@@ -41,9 +42,18 @@ class InventorySourceItemUpdateObserver extends InventorySourceItemObserver
 
         // try to load the inventory source item with the given SKU and source code
         if ($entity = $this->loadInventorySourceItemBySkuAndSourceCode($attr[MemberNames::SKU], $attr[MemberNames::SOURCE_CODE])) {
+            if (\array_key_exists(ColumnKeys::RELATIVE, $attr)) {
+                if (((int) $attr[ColumnKeys::RELATIVE]) === 1) {
+                    $attr[MemberNames::QUANTITY] += $entity[MemberNames::QUANTITY];
+                }
+                unset($attr[ColumnKeys::RELATIVE]);
+            }
+
             return $this->mergeEntity($entity, $attr);
         }
-
+        if (\array_key_exists(ColumnKeys::RELATIVE, $attr)) {
+            unset($attr[ColumnKeys::RELATIVE]);
+        }
         // simply return the attributes
         return $attr;
     }

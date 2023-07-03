@@ -97,7 +97,8 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
             $defaultValue = array(
                 sprintf('%s=%s', ColumnKeys::SOURCE_CODE, $inventorySource[MemberNames::SOURCE_CODE]),
                 sprintf('%s=1', ColumnKeys::STATUS),
-                sprintf('%s=%%f', ColumnKeys::QUANTITY)
+                sprintf('%s=%%f', ColumnKeys::QUANTITY),
+                sprintf('%s=%%s', ColumnKeys::RELATIVE),
             );
             // concatenate them with the multiple field delimiter and add them to the array with the templates
             $this->templateDefaultValues[] = implode($subject->getMultipleFieldDelimiter(), $defaultValue);
@@ -142,7 +143,7 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
         // data is NOT available, that looks like
         //   source_code=default,status=1,quantity=<value-from-column-qty-if-available>
         if ($this->hasHeader(ColumnKeys::INVENTORY_SOURCE_ITEMS) === false) {
-            $defaultValues = $this->loadDefaultValues($this->getValue(ColumnKeys::QTY, 0));
+            $defaultValues = $this->loadDefaultValues($this->getValue(ColumnKeys::QTY, 0), $this->getValue(ColumnKeys::QTY_RELATIVE, 0));
         }
 
         // unserialize the inventory source item data from the column that looks like
@@ -177,14 +178,15 @@ class ProductSourceItemObserver extends AbstractProductImportObserver implements
      * Process the template and set the passed quantity for each
      * configured inventory source and return the default values.
      *
-     * @param float $qty The quantity to initialize the template with
+     * @param float  $qty      The quantity to initialize the template with
+     * @param string $relative The relative flag to initialize the template with. 1 = relative everything else = absolute
      *
      * @return array The initialized array with the default values
      */
-    protected function loadDefaultValues(float $qty) : array
+    protected function loadDefaultValues(float $qty, $relative = '') : array
     {
-        return array_map(function ($value) use ($qty) {
-            return sprintf($value, $qty);
+        return array_map(function ($value) use ($qty, $relative) {
+            return sprintf($value, $qty, $relative);
         }, $this->templateDefaultValues);
     }
 

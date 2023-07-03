@@ -1,3 +1,9 @@
+# Version 20.1.0
+
+## Features
+
+* Allow to import msi stock quantity to calculate relative. Column in csv: `relative` with value `1`
+
 # Version 20.0.0
 
 ## Bugfixes

@@ -41,6 +41,13 @@ class ColumnKeys extends \TechDivision\Import\Product\Utils\ColumnKeys
     const QUANTITY = 'quantity';
 
     /**
+     * Name for the column 'relative'.
+     *
+     * @var string
+     */
+    const RELATIVE= 'relative';
+
+    /**
      * Name for the column 'status'.
      *
      * @var string

@@ -138,6 +138,7 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
         $sourceCode = $this->getValue(ColumnKeys::SOURCE_CODE);
         $status = $this->castValueByBackendType(BackendTypeKeys::BACKEND_TYPE_INT, $this->getValue(ColumnKeys::STATUS));
         $quantity = $this->castValueByBackendType(BackendTypeKeys::BACKEND_TYPE_FLOAT, $this->getValue(ColumnKeys::QUANTITY));
+        $relativQty = $this->castValueByBackendType(BackendTypeKeys::BACKEND_TYPE_INT, $this->getValue(ColumnKeys::RELATIVE));
 
         // return the prepared MSI inventory source item
         return $this->initializeEntity(
@@ -145,7 +146,8 @@ class InventorySourceItemObserver extends AbstractMsiImportObserver
                 MemberNames::SKU         => $sku,
                 MemberNames::STATUS      => $status,
                 MemberNames::SOURCE_CODE => $sourceCode,
-                MemberNames::QUANTITY    => $quantity
+                MemberNames::QUANTITY    => $quantity,
+                ColumnKeys::RELATIVE     => $relativQty
             )
         );
     }
