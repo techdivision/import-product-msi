@@ -1,3 +1,13 @@
+# Version 21.0.0
+
+## Features
+
+### PHP 8.1 Compatibility
+
+* Update dependencies
+* Add PHP ">=8.1" support
+* Remove PHP 7.3 support
+
 # Version 20.1.0
 
 ## Features
